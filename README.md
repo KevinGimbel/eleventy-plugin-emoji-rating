@@ -1,73 +1,67 @@
-## Eleventy Plugin Template
+# eleventy-plugin-emoji-rating
+> Display accessible ratings using emoji 
 
-> A starter environment for creating plugins for Eleventy (11ty).
-
-Fork this repo, or select "Use this template" to get started.
-
-### Using this template
-
-This template is setup to run a single page 11ty site for testing your plugin functionality. The build files are excluded from the final plugin package via `.npmignore`.
-
-Your plugin functionality should live in/be exported from `.eleventy.js`. You will find a sample of creating a filter plugin in this template, including setting up a default config and merging user options.
-
-**Be sure to update the `package.json` with your own details!**
-
-### Testing your plugin
-
-You can test your functionality within this project's local 11ty build by running `npm start`, but you'll also want to test it _as a plugin_.
-
-From another local 11ty project, you can set the `require()` path relatively to your plugin's project directory, and then use it just as you would for a plugin coming from a package.
-
-Example, assuming you place all your repositories within the same parent directory:
-
-```js
-const pluginName = require("../plugin-directory");
-
-module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(pluginName, { optionName: 'if needed' );
-};
-```
-
-Then, run the project to test the plugin's functionality.
-
-Note that making changes in the plugin source will likely require restarting the test project.
-
-### Resources for creating an 11ty plugin
-
-- Bryan Robinson's ["Create a Plugin with 11ty"](https://www.youtube.com/watch?v=aO-NFFKjnnE) demonstration on "Learn With Jason"
-
----
-
-**The following is a boilerplate for your final plugin README**.
+<!-- BEGIN mktoc -->
+- [Usage](#usage)
+  - [Config Options](#config-options)
+  - [Config Examples](#config-examples)
+- [Examples](#examples)
+<!-- END mktoc -->
 
 ## Usage
 
-Describe how to install your plugin, such as:
+Install via npm:
 
 ```bash
-npm install @scope/plugin-name
+npm install @kevingimbel/eleventy-plugin-emoji-rating
 ```
 
 Then, include it in your `.eleventy.js` config file:
 
 ```js
-const pluginName = require("@scope/plugin-name");
+const emojiRating = require("@kevingimbel/eleventy-plugin-emoji-rating");
 
 module.exports = (eleventyConfig) => {
-  eleventyConfig.addPlugin(pluginName);
+  eleventyConfig.addPlugin(emojiRating);
+};
+```
+## Config
+### Config Options
+
+Global config options, set in `eleventy.js`.
+
+| Option      | Type | Default       | Description | 
+| ----------- | ---- | ------------- | ----------- | 
+| `max_rating` | Number | 5 | maximum a rating can be. 5 would mean "x of 5 stars" where 5 is the best. | 
+| `emoji` | String | "⭐️" | Emoji to display | 
+| `emoji_inactive` | String | / | Emoji to use for inactive slots (See examples) | 
+| `extra_classes` | String | / | extra CSS classes for the wrapping element | 
+| `htmlTag` | String | `span` | The wrapping element | 
+| `aria_label` | String | `Rating: $rating of $max_rating` | The label for screen readers, should contain all important info. `$rating` will be replaced with the rating, `$max_rating` with the maximum rating as defined inline or in plugin config | 
+
+### Config Examples
+
+```js
+const emojiRating = require("@kevingimbel/eleventy-plugin-emoji-rating");
+
+module.exports = (eleventyConfig) => {
+  eleventyConfig.addPlugin(emojiRating, {
+    max_rating: 10,
+    htmlTag: "div",
+    emoji: "🙉"
+    emoji_inactive: "🙈"
+  });
 };
 ```
 
-## Config Options
+## Examples
 
-| Option      | Type | Default       |
-| ----------- | ---- | ------------- |
-| option name | type | default value |
+```txt
+{% rating "3" %} => 3/5 ⭐️⭐️⭐️
 
-## Config Examples
+{% rating "4" "🍋" "🍊" "7" %} => 4/7 🍋🍋🍋🍋🍊🍊🍊
 
-Show examples of likely configurations.
+{% rating "5" "🤦‍♀️" %} => 5/5 🤦‍♀️🤦‍♀️🤦‍♀️🤦‍♀️🤦‍♀️
 
-## Credits
-
-Add credits if needed.
+{% rating "2" "🙉" "🙈" %}
+```
