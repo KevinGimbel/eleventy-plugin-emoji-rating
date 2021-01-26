@@ -6,6 +6,8 @@
   - [Config Options](#config-options)
   - [Config Examples](#config-examples)
 - [Examples](#examples)
+  - [What makes this accessible?](#what-makes-this-accessible)
+  - [More examples](#more-examples)
 <!-- END mktoc -->
 
 ## Usage
@@ -48,7 +50,7 @@ module.exports = (eleventyConfig) => {
   eleventyConfig.addPlugin(emojiRating, {
     max_rating: 10,
     htmlTag: "div",
-    emoji: "🙉"
+    emoji: "🙉",
     emoji_inactive: "🙈"
   });
 };
@@ -56,12 +58,39 @@ module.exports = (eleventyConfig) => {
 
 ## Examples
 
-```txt
-{% rating "3" %} => 3/5 ⭐️⭐️⭐️
+The plugin provides a shortcode that creates HTML. 
+
+```html
+<!-- shortcode in Markdown file -->
+{% rating "3" %}
+
+<!-- rendered HTML -->
+<span class="rating " role="img" aria-label="Rating: 3 of 5">3/5 <span class="rating--icon" aria-hidden="true">⭐️</span><span class="rating--icon" aria-hidden="true">⭐️</span><span class="rating--icon" aria-hidden="true">⭐️</span><span class="rating--icon-inactive" aria-hidden="true"></span><span class="rating--icon-inactive" aria-hidden="true"></span></span>
+```
+
+### What makes this accessible?
+
+The generated HTML is fully accessible to screen readers. The `aria-label` is read out and gives a better info than a text string `3/5 ⭐️⭐️⭐️` would, which is read aloud like "Three slash five emoji-star emoji-star emoji-star", while the accessible one is read out as "Rating: 3 of 5", and the emoji are ignored (`aria-hidden`) because they do not give any additional info. With a custom `aria_label` set the emoji could even be represented in words:
+
+```js
+const emojiRating = require("@kevingimbel/eleventy-plugin-emoji-rating");
+
+module.exports = (eleventyConfig) => {
+  eleventyConfig.addPlugin(emojiRating, {
+    aria_label: "Rating: $rating of $max_rating stars"
+  });
+};
+```
+
+### More examples
+
+More examples with custom options.
+
+```html
 
 {% rating "4" "🍋" "🍊" "7" %} => 4/7 🍋🍋🍋🍋🍊🍊🍊
 
 {% rating "5" "🤦‍♀️" %} => 5/5 🤦‍♀️🤦‍♀️🤦‍♀️🤦‍♀️🤦‍♀️
 
-{% rating "2" "🙉" "🙈" %}
+{% rating "2" "🙉" "🙈" %} =? 2/5 🙉🙉🙈🙈🙈
 ```
