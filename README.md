@@ -92,5 +92,5 @@ More examples with custom options.
 
 {% rating "5" "🤦‍♀️" %} => 5/5 🤦‍♀️🤦‍♀️🤦‍♀️🤦‍♀️🤦‍♀️
 
-{% rating "2" "🙉" "🙈" %} =? 2/5 🙉🙉🙈🙈🙈
+{% rating "2" "🙉" "🙈" %} => 2/5 🙉🙉🙈🙈🙈
 ```
